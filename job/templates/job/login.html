@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/job/check/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    email :  <input type="email" name="email"><br>
+    password : <input type="password" name="password"><br>
+    <input type="submit" value="Login"><br>
+    <a href="/job/forgot/">forgot password</a>
+</form>
+<form>
+ <input type="button" value="Go back!" onclick="history.back()">
+</form>
+</body>
+</html>

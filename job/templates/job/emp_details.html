@@ -1,0 +1,13 @@
+<h3>Please enter employee details</h3>
+<form action="/job/save/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    first_name : <input type="text" name="first_name"><br>
+    last_name : <input type="text" name="last_name"><br>
+    email : <input type="email" name="email"><br>
+    password : <input type="password" name="password"><br>
+    username : <input type="text" name="username"><br>
+    salary : <input type="number" name="salary"><br>
+    address : <input type="text" name="address"><br>
+    <input type="submit" value="Submit">
+</form>
+<a href="/job/home/">GO BACK</a>

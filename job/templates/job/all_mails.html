@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p><b><u>Sent mails:</u></b></p>
+{% for i in inbox %}
+<li>
+    <ol>
+        sender : {{i.sender}}<br>
+        receiver :{{i.receiver}}<br>
+        subject : {{i.subject}}<br>
+        body : {{i.body}}<br>
+        file : {{i.files}}<br></ol>
+</li>
+{% endfor %}
+
+<p><b><u>Inbox:</u></b></p>
+{% for i in sent %}
+<li>
+    <ol>
+        sender : {{i.sender}}<br>
+        receiver :{{i.receiver}}<br>
+        subject : {{i.subject}}<br>
+        body : {{i.body}}<br>
+        file : {{i.files}}<br></ol>
+</li>
+{% endfor %}
+<a href="/job/profile/">Back</a>
+</body>
+</html>

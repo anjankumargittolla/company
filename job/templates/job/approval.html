@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for i in list %}
+<form action="/job/eligible/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    emp_name : {{i.emp_name}}<br>
+    emp_email : {{i.emp_email}}<br>
+    designation : {{i.designation}}<br>
+    gender : {{i.gender}}<br>
+    profile_pic : <img src="{{i.profile_pic.url}}" height="50" width="60"><br>
+    phone : {{i.phone}}<br>
+    qualification : {{i.qualification}}<br>
+    experience : {{i.experience}}<br>
+    is_verified : <input type="checkbox" value="is_verified"><br>
+    <input type="submit" name="submit">
+</form>
+---------------------------------------------------------<br>
+{% endfor %}
+<a href="/job/home/">Back</a>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Name: {{primary.Name}}<br>
+Email : {{primary.Email}}<br>
+Role : {{primary.Role}}<br>
+Phone : {{primary.phone}}<br>
+Qualification : {{primary.qualification}}<br>
+Experience : {{primary.experience}}<br>
+profile pic : <img src="{{primary.profile_pic.url}}" height="50" width="60"><br>
+is_verified : {{primary.is_verified}}<br>
+Team:{{primary.team_name}}<br>
+Project : {{primary.project.project_name}}<br>
+<a href="/job/all_mails/">mails</a><br>
+<!--<p><b><u>Sent mails:</u></b></p>-->
+<!--{% for i in primary.sent %}-->
+<!--<li>-->
+<!--    <ol>-->
+<!--        sender : {{i.sender}}<br>-->
+<!--        receiver :{{i.receiver}}<br>-->
+<!--        subject : {{i.subject}}<br>-->
+<!--        body : {{i.body}}<br>-->
+<!--        file : {{i.files}}<br></ol>-->
+<!--</li>-->
+<!--{% endfor %}-->
+
+<!--<p><b><u>Inbox:</u></b></p>-->
+<!--{% for i in primary.inbox %}-->
+<!--<li>-->
+<!--    <ol>-->
+<!--        sender : {{i.sender}}<br>-->
+<!--        receiver :{{i.receiver}}<br>-->
+<!--        subject : {{i.subject}}<br>-->
+<!--        body : {{i.body}}<br>-->
+<!--        file : {{i.files}}<br></ol>-->
+<!--</li>-->
+<!--{% endfor %}-->
+
+<a href="/job/logout/">Logout</a><br>
+<a href="/job/list/">Employees List</a><br>
+<a href="/job/home/"> Back</a><br>
+</body>
+</html>
