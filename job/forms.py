@@ -1,7 +1,14 @@
 """from django.forms import ModelForm to work with forms"""
 from django.forms import ModelForm
 """All models have to import from app to use Modelforms"""
-from .models import Employee, Register, Designation, Project, Team, MailBox
+from .models import Employee, Register, Designation, Project, Team, MailBox, Company
+
+
+class CompanyForm(ModelForm):
+    """Modelform for CompanyForm"""
+    class Meta:
+        model = Company
+        fields = "__all__"
 
 
 class DesignationForm(ModelForm):
@@ -16,7 +23,7 @@ class RegisterForm(ModelForm):
     class Meta:
         model = Register
         fields = ['emp_name', 'emp_email', 'designation',
-                  'gender', 'profile_pic', 'phone', 'qualification', 'experience']
+                  'gender', 'profile_pic', 'phone', 'qualification', 'experience', 'comp_details']
 
 
 class EmployeeForm(ModelForm):

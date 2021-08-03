@@ -5,11 +5,17 @@
     <title>Title</title>
 </head>
 <body>
-<form action="." method="post" enctype="multipart/form-data">
+<form action="/job/save_team/" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{team.as_p}}
+    Team name : <input type="text" name="team_name"><br>
+    <label>Team Members :</label>
+    <select name="team_members" id="team_members">
+        {% for i in team %} {{i}}
+      <option value="{{i}}">{{i}}</option>
+        {% endfor %}
+    </select><br>
     <input type="submit" value="Submit">
 </form>
-<a href="/job/home/">GO BACK</a>
+<a href="/job/profile/">GO BACK</a>
 </body>
 </html>

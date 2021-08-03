@@ -20,10 +20,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 """From forms all the model forms are imported"""
-from .forms import RegisterForm, DesignationForm, TeamForm, ProjectForm, MailBoxForm
+from .forms import RegisterForm, DesignationForm, TeamForm, ProjectForm, MailBoxForm, CompanyForm
 
 """From app models all the models are imported"""
 from .models import Register, Employee, Team, MailBox, Project
+
+""" from django.db import connection to use raw queries """
+from django.db import connection
 
 
 # Create your views here.
@@ -32,6 +35,18 @@ from .models import Register, Employee, Team, MailBox, Project
 def home(request):
     """This is for home page"""
     return render(request, "job/home.html", {})
+
+
+def set_company(request):
+    """TO save the all the designations in the organisation"""
+    if request.method == "POST":
+        form = CompanyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, "job/company.html", {"comp": CompanyForm()})
+    else:
+        form = CompanyForm()
+        return render(request, "job/company.html", {"comp": form})
 
 
 def set_designation(request):
@@ -49,6 +64,8 @@ def set_designation(request):
 def register(request):
     """For the Register table"""
     if request.method == "POST":
+        # import pdb
+        # pdb.set_trace()
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
@@ -75,8 +92,8 @@ def approval(request):
 
 
 def eligible(request):
-    import pdb
-    pdb.set_trace()
+    # import pdb
+    # pdb.set_trace()
     if request.method == "POST":
         return HttpResponse("ok")
 
@@ -88,15 +105,15 @@ def emp_details(request):
 
 def emp_data(request):
     """For employee table to store the all the required details"""
-    # import pdb
-    # pdb.set_trace()
+    import pdb
+    pdb.set_trace()
     st = Register.objects.get(emp_email=request.POST["email"])
     if request.method == 'POST' and st.is_verified:
         user = User.objects.create_user(
             first_name=request.POST['first_name'],
             last_name=request.POST['last_name'],
             username=request.POST['username'],
-            email=request.POST["first_name"] + request.POST["last_name"] + "@gmail.com",
+            email=request.POST["first_name"] + request.POST["last_name"] + st.comp_details.domain,
             password=request.POST['password'],
         )
         print(user.email)
@@ -108,7 +125,7 @@ def emp_data(request):
                                 )
         return HttpResponseRedirect('/job/home/')
     else:
-        return HttpResponse("Aproval is not given")
+        return HttpResponse("Approval is not given")
 
 
 def emp_login(request):
@@ -143,13 +160,13 @@ def profile(request):
     # import pdb
     # pdb.set_trace()
     emp = Employee.objects.get(employee=request.user)
-    team_details = Team.objects.get(team_members=emp)
-    print(team_details, "----------------------@@@@@@@@@@@")
-    mails = MailBox.objects.filter(sender=emp)
-    inbox = MailBox.objects.filter(receiver=emp)
-    project = Project.objects.get(teams=team_details)
+    # team_details = Team.objects.get(team_members=emp)
+    # print(team_details, "----------------------@@@@@@@@@@@")
+    # mails = MailBox.objects.filter(sender=emp)
+    # inbox = MailBox.objects.filter(receiver=emp)
+    # project = Project.objects.get(teams=team_details)
 
-    print(mails, inbox, project, "-------")
+    # print(mails, inbox, project, "-------")
     data = {
         'Name': emp.emp_details.emp_name,
         "Email": emp.employee.email,
@@ -158,11 +175,12 @@ def profile(request):
         "qualification": emp.emp_details.qualification,
         "experience": emp.emp_details.experience,
         "profile_pic": emp.emp_details.profile_pic,
-        "team_name": team_details,
-        "sent": mails,
-        "inbox": inbox,
+        "company" : emp.emp_details.comp_details.comp_name,
+        # "team_name": team_details,
+        # "sent": mails,
+        # "inbox": inbox,
         "is_verified": emp.emp_details.is_verified,
-        "project": project,
+        # "project": project,
     }
     if hr_status(request):
         return render(request, 'job/hr.html', {'primary': data})
@@ -206,9 +224,33 @@ def emp_logout(request):
 @login_required(login_url='/job/login/')
 def emp_list(request):
     """To show the all the employees details in that organisation"""
-    employees = Employee.objects.all()
-    print(employees)
-    return render(request, "job/emp_list.html", {"list": employees})
+    # import pdb
+    # pdb.set_trace()
+    user = request.user
+    emp = Employee.objects.get(employee=user)
+    # cursor = connection.cursor()
+    # a = cursor.execute('''select * from job_employee
+    # where id=(select id from job_register where id={})'''.format(emp.id))
+    # b = a.fetchall()
+    # print(b, "----------------------------------")
+    reg = Register.objects.filter(comp_details=emp.emp_details.comp_details).values_list("id")
+    new_list = Employee.objects.filter(emp_details__in=reg)
+    return render(request, "job/emp_list.html", {"emp": new_list})
+
+    # import pdb
+    # pdb.set_trace()
+    # user = request.user
+    # emp = Employee.objects.get(employee=user)
+    # comp = emp.emp_details.comp_details.comp_name
+    # emp_all = Employee.objects.all()
+    # new = []
+    # for i in emp_all:
+    #     if i.emp_details.comp_details.comp_name == comp:
+    #         new.append(i)
+    #     else:
+    #         continue
+    # # reg = Register.objects.filter(comp_details=emp.emp_details.comp_details)
+    # return render(request, "job/emp_list.html", {"emp" : new})
 
 
 @login_required(login_url='/job/login/')
@@ -217,16 +259,23 @@ def add_team(request):
     # import pdb
     # pdb.set_trace()
     if hr_status(request):
-        if request.method == "POST":
-            form = TeamForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return render(request, "job/team.html", {"team": TeamForm()})
-        else:
-            form = TeamForm()
-            return render(request, "job/team.html", {"team": form})
+        user = request.user
+        emp = Employee.objects.get(employee=user)
+        reg = Register.objects.filter(comp_details=emp.emp_details.comp_details).values_list("id")
+        new_list = Employee.objects.filter(emp_details__in=reg)
+        return render(request, "job/team.html", {"team": new_list})
     else:
         return HttpResponse("Only HR and MANAGER can access this page")
+
+
+def save_team(request):
+    if request.method == "POST":
+        # import pdb
+        # pdb.set_trace()
+        Team.objects.create(team_name=request.POST["team_name"],
+                            team_members=request.POST["team_members"])
+        print(request.POST["team_members"])
+        return HttpResponseRedirect("/job/team/")
 
 
 @login_required(login_url='/job/login/')

@@ -5,12 +5,13 @@
     <title>Title</title>
 </head>
 <body><h2>EMPLOYEES LIST </h2>
-{% for i in list %}
+{% for i in emp %}
 NAME :{{i.emp_details.emp_name}}<br>
 MAIL : {{i.emp_details.emp_email}}<br>
 PHONE : {{i.emp_details.phone}}<br>
 QUALIFICATION : {{i.emp_details.qualification}}<br>
 EXP : {{i.emp_details.experience}}<br>
+Company : {{i.emp_details.comp_details.comp_name}}<br>
 DESIGNATION : {{i.emp_details.designation}}<br>
 is_verified : {{i.emp_details.is_verified}}<br>
  <img src="{{i.emp_details.profile_pic.url}}" height="50" width="60"><br>

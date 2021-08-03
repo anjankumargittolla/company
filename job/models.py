@@ -7,6 +7,17 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+class Company(models.Model):
+    """Model for declaring company name"""
+    comp_name = models.CharField(max_length=50)
+    domain = models.CharField(max_length=10)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.comp_name
+
+
 class Designation(models.Model):
     """To declare the employees designation"""
     role = models.CharField(max_length=15)
@@ -31,6 +42,7 @@ class Register(models.Model):
     designation = models.ForeignKey(Designation, related_name="emp_role", on_delete=models.CASCADE)
     gender = models.CharField(max_length=8, choices=GENDER_CHOICES, default=None)
     profile_pic = models.ImageField("media/")
+    comp_details = models.ForeignKey(Company, related_name="comp_info", on_delete=models.CASCADE)
     phone = models.IntegerField()
     qualification = models.CharField(max_length=20)
     experience = models.IntegerField(default=0)

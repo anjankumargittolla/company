@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="." method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{comp.as_p}}
+    <input type="submit" value="Submit">
+</form>
+<a href="/job/home/">GO BACK</a>
+</body>
+</html>

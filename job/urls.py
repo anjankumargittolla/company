@@ -23,4 +23,6 @@ urlpatterns = [
     path("mails/", views.mailbox, name="mails"),
     path("profile/", views.profile, name="profile"),
     path("all_mails/", views.all_mails, name="all_mails"),
+    path("company/", views.set_company, name="company"),
+    path("save_team/", views.save_team, name="save_team"),
 ]
